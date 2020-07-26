@@ -1,8 +1,11 @@
 import Sequelize from 'sequelize';
 
+import City from '../app/models/City';
+import Request from '../app/models/Request';
+
 import databaseConfig from '../config/database';
 
-const models = [];
+const models = [City, Request];
 
 class Database {
   constructor() {
