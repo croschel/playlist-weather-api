@@ -8,21 +8,21 @@ class WeatherController {
   async store(req, res) {
     // get Params from request
     const { city } = req.params;
-    console.log(city.toLowerCase());
-    // insert City on DB
-    let searchedCity = await City.findOne({
-      where: {
-        city: city.toLowerCase(),
-      },
-    });
-    if (!searchedCity) {
-      searchedCity = await City.create({ city: city.toLowerCase() });
-    }
+
     try {
       // call for Open Weather Api
       const response = await weather.get(
         `?q=${city}&units=metric&APPID=${process.env.WEATHER_KEY}`
       );
+      // insert City on DB
+      let searchedCity = await City.findOne({
+        where: {
+          city: city.toLowerCase(),
+        },
+      });
+      if (!searchedCity) {
+        searchedCity = await City.create({ city: city.toLowerCase() });
+      }
 
       // get Temperature from previously call
       const { temp } = response.data.main;

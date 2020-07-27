@@ -1,11 +1,13 @@
-FROM node:alpine
+FROM node:lts-alpine
 
 WORKDIR /home/callroschel/WebProjects
 
-COPY package*.json ./
-RUN yarn install
+COPY package*.json yarn.* ./
+
+RUN yarn
 
 COPY . .
+
 EXPOSE 3333
 
-CMD ["yarn", "dev"]
+CMD ["yarn", "start"]
