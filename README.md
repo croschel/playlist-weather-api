@@ -23,6 +23,7 @@
   <a href="#requirements">Requirements</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#back-end-with-docker-compose">Back-End with Docker Compose</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#back-end-with-yarn">Back-End with yarn</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#how-to-use">How to use</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#routes">Routes</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#deploy">Deploy</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#how-to-contribute">How to contribute</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#license">Licença</a>
@@ -69,11 +70,25 @@ This Project is a API to suggest a playlist of music depending on temperature of
 ## How to use
 
 - Type your city on first route param:
-  - http://localhost:3333/your city
+  - http://localhost:3333/search/your city
 - Examples:
   - Campinas,
   - Sao Jose do Rio Preto
   - Nova York
+
+## Routes
+
+### Weather - The Main for users
+
+- method: `get`, route: `/search/city name`;
+
+### Requests - How many requests this app have been made?
+
+- method: `get`, route: `/consult/requests`;
+
+### City - How many requests this city have been made?
+
+- method: `get`, route: `/consult/city/city name`;
 
 ## Deploy
 - This Application is running on Digital Ocean so you can try with this url:
