@@ -1,56 +1,35 @@
-import weather from '../../services/weather';
+import weatherApiCity from '../../utils/weatherApi';
 import { checkTemperature } from '../../utils/checkTemperature';
-import spotify from '../../config/spotify';
-import City from '../models/City';
-import Request from '../models/Request';
+import insertCity from '../../utils/insertCity';
+import spotifyApiPlaylist from '../../utils/spotifyApi';
+import { getTracksFromRef } from '../../utils/spotifyRequests';
+import insertRequest from '../../utils/insertRequest';
 
 class WeatherController {
   async store(req, res) {
     // get Params from request
     const { city } = req.params;
-
     try {
       // call for Open Weather Api
-      const response = await weather.get(
-        `?q=${city}&units=metric&APPID=${process.env.WEATHER_KEY}`
-      );
+      const temp = await weatherApiCity(city);
+
       // insert City on DB
-      let searchedCity = await City.findOne({
-        where: {
-          city: city.toLowerCase(),
-        },
-      });
-      if (!searchedCity) {
-        searchedCity = await City.create({ city: city.toLowerCase() });
-      }
+      const searchedCity = await insertCity(city);
 
-      // get Temperature from previously call
-      const { temp } = response.data.main;
-
-      // get music type
+      // get music type according to temperature from city
       const musicType = checkTemperature(temp);
 
       // call the right playlist from spotify
-      const responseSpot = await spotify.search({
-        type: 'playlist',
-        query: musicType,
-      });
-
-      // disrupt href from object
-      const { href } = responseSpot.playlists.items[0].tracks;
+      const playlistRef = await spotifyApiPlaylist(musicType);
 
       // get array items from previously call
-      const { items } = await spotify.request(href);
+      const tracks = await getTracksFromRef(playlistRef);
 
       // get tracklist from previously call
-      const trackList = items.map(item => item.track.name);
+      const trackList = tracks.map(item => item.track.name);
 
       // Insert Request on DB
-      await Request.create({
-        temperature: temp,
-        song_type: musicType,
-        city_id: searchedCity.id,
-      });
+      await insertRequest(temp, musicType, searchedCity);
 
       return res.json({
         City: city,
@@ -63,18 +42,6 @@ class WeatherController {
         .status(400)
         .json({ error: "We didn't find this city please try again" });
     }
-  }
-
-  async index(req, res) {
-    const cities = await Request.findAll({
-      include: [
-        {
-          model: City,
-        },
-      ],
-    });
-
-    return res.json(cities);
   }
 }
 
