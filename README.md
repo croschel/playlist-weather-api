@@ -92,7 +92,7 @@ This Project is a API to suggest a playlist of music depending on temperature of
 
 ## Deploy
 - This Application is running on Digital Ocean so you can try with this url:
-  - URL: `http://198.199.65.166/your city`
+  - URL: `http://198.199.65.166/search/city name`
 
 ## How to contribute
 
